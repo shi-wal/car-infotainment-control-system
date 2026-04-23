@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "492123193397",
+    "firebase_url": "https://carremotecontrol-cd1b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "carremotecontrol-cd1b2",
+    "storage_bucket": "carremotecontrol-cd1b2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:492123193397:android:8c7ec4b885b71c41adf17c",
+        "android_client_info": {
+          "package_name": "com.example.controllerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc6S6I-bZZpePVmY4G1kQ9zj0wThxkAtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
