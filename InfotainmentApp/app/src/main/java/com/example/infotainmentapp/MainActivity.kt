@@ -1,14 +1,12 @@
 package com.example.infotainmentapp
 
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,37 +17,41 @@ class MainActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().reference
 
-        val tvMusic=findViewById<TextView>(R.id.tvMusic)
-        val tvLights=findViewById<TextView>(R.id.tvLights)
-        val tvVolume=findViewById<TextView>(R.id.tvVolume)
+        val tvMusic = findViewById<TextView>(R.id.tvMusic)
+        val tvLights = findViewById<TextView>(R.id.tvLights)
+        val tvVolume = findViewById<TextView>(R.id.tvVolume)
+        val tvLock = findViewById<TextView>(R.id.tvLock)
+        val tvAC = findViewById<TextView>(R.id.tvAC)
+        val progressVol = findViewById<ProgressBar>(R.id.progressVolume)
+
+        val green = Color.parseColor("#2E7D32")
+        val red = Color.parseColor("#C62828")
+        val cyan = Color.parseColor("#00E5FF")
 
         //Listen for music changes in real-time
-        database.child("car").child("music").
-        addValueEventListener(object : ValueEventListener{
+        database.child("car").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val value = snapshot.getValue(String::class.java) ?: "OFF"
-                tvMusic.text = "🎵 Music: $value"
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+                val music = snapshot.child("music").getValue(String::class.java) ?: "OFF"
+                val lights = snapshot.child("lights").getValue(String::class.java) ?: "OFF"
+                val lock = snapshot.child("lock").getValue(String::class.java) ?: "LOCKED"
+                val ac = snapshot.child("ac_temp").getValue(Int::class.java) ?: 22
+                val vol = snapshot.child("volume").getValue(Int::class.java) ?: 50
+                tvMusic.text = music
+                tvMusic.setTextColor(if (music == "ON") green else red)
 
-        //Listen for light changes
-        database.child("car").child("lights").
-        addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val value = snapshot.getValue(String::class.java) ?: "OFF"
-                tvLights.text = "🎵 Lights: $value"
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+                tvLights.text = lights
+                tvLights.setTextColor(if (lights == "ON") green else red)
 
-        //Listen for volume changes
-        database.child("car").child("volume").
-        addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val value = snapshot.getValue(Int::class.java) ?: 0
-                tvVolume.text = "🎵 Volume: $value"
+                tvLock.text = lock
+                tvLock.setTextColor(if (lock == "LOCKED") red else green)
+
+                tvAC.text = "${ac}°C"
+                tvAC.setTextColor(cyan)
+
+                tvVolume.text = "$vol"
+                progressVol.progress = vol
             }
+
             override fun onCancelled(error: DatabaseError) {}
         })
     }
